@@ -6,7 +6,9 @@
 #include <vector>
 #include<stdlib.h>
 #include<string.h>
+
 using namespace std;
+
 #pragma comment (lib, "Ws2_32.lib")
 
 #define IP_ADDRESS "127.0.0.1"
@@ -54,7 +56,7 @@ int process_client(client_type& new_client, std::vector<client_type>& client_arr
                  
                
 
-                //}
+                
 
                 //Broadcast that message to the other clients
                 for (int i = 0; i < MAX_CLIENTS; i++)
@@ -168,7 +170,7 @@ int main()
             if (client[i].socket != INVALID_SOCKET)
                 num_clients++;
 
-            //std::cout << client[i].socket << std::endl;
+           
         }
 
         if (temp_id != -1)
