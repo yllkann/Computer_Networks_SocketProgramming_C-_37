@@ -42,3 +42,55 @@ void main()
         return;
     }
 
+    //Step 3: Fill in a hint Structure
+    sockaddr_in hint;
+    hint.sin_family = AF_INET;
+    hint.sin_port = htons(port);
+    inet_pton(AF_INET, ipAddress.c_str(), &hint.sin_addr);
+
+    //Step 4:  Connect to server
+    int connResult = connect(sock, (sockaddr)&hint, sizeof(hint));
+    if (connResult == SOCKET_ERROR)
+    {
+        cerr << "Can't Connect to server, ERR # " << WSAGetLastError << endl;
+        closesocket(sock);
+        WSACleanup();
+        return;
+    }
+
+    //Step 5: Do-While loop to send and receive the data
+    char  buf[6000];
+    string userInput;
+    do
+    {
+        /
+        *Prompt the user for some text
+        * Send the text
+        * Wait for response
+        * Echo response to console
+        */
+
+        // Step 1: Prompt the user for some text
+        cout << "Send message to server : ";
+        getline(cin, userInput);
+
+        //Send the text
+        if (userInput.size() > 0)
+        {
+            int sendResult = send(sock, userInput.c_str(), userInput.size() + 1, 0);
+            if (sendResult != SOCKET_ERROR)
+            {
+                // Wait for the Response
+                ZeroMemory(buf, 4096);
+                int bytesReceived = recv(sock, buf, 4096, 0);
+                if (bytesReceived > 0)
+                {
+                    cout << "SERVER> " << string(buf, 0, bytesReceived) << endl;
+                }
+            }
+        }
+    } while (userInput.size() > 0);
+    // Step 6: Gracefully close down Everything
+    closesocket(sock);
+    WSACleanup();
+}
